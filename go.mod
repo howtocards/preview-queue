@@ -15,7 +15,6 @@ require (
 	github.com/mailru/easyjson v0.7.0 // indirect
 	github.com/oklog/ulid v1.3.1
 	github.com/powerman/structlog v0.5.0
-	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/sebest/xff v0.0.0-20160910043805-6c115e0ffa35
 	github.com/spf13/pflag v1.0.5
 	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271

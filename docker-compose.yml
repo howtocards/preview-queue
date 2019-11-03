@@ -11,3 +11,16 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: queue
+    container_name: queue
+    restart: always
+    entrypoint: /queue
+    command:
+      - "--rabbit.host=rabbit"
+    ports:
+      - "8080:8080"
