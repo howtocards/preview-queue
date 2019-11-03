@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	models "facade/src/internal/api/generated/models"
+	models "github.com/howtocards/preview-queue/src/internal/api/generated/models"
 )
 
 // NewRenderParams creates a new RenderParams object

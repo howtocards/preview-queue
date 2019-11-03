@@ -9,7 +9,7 @@ import (
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 
-	"facade/src/internal/api/generated/restapi/operations"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi/operations"
 )
 
 //go:generate swagger generate server --target ../../generated --name Facade --spec ../../../../../swagger.yml --exclude-main --strict

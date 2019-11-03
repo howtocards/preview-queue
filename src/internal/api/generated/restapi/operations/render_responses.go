@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
-	models "facade/src/internal/api/generated/models"
+	models "github.com/howtocards/preview-queue/src/internal/api/generated/models"
 )
 
 // RenderOKCode is the HTTP code returned for type RenderOK

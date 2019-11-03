@@ -10,7 +10,7 @@ import (
 	loads "github.com/go-openapi/loads"
 	runtime "github.com/go-openapi/runtime"
 
-	"facade/src/internal/api/generated/restapi/operations"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi/operations"
 )
 
 func BuildAPI(
