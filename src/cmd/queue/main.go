@@ -1,11 +1,11 @@
 package main
 
 import (
-	"facade/src/internal/api"
-	"facade/src/internal/config"
-	"facade/src/internal/queue"
 	"fmt"
 
+	"github.com/howtocards/preview-queue/src/internal/api"
+	"github.com/howtocards/preview-queue/src/internal/config"
+	"github.com/howtocards/preview-queue/src/internal/queue"
 	"github.com/powerman/structlog"
 	flag "github.com/spf13/pflag"
 	"github.com/streadway/amqp"

@@ -1,12 +1,12 @@
 package api
 
 import (
-	"facade/src/internal/api/generated/models"
-	"facade/src/internal/api/generated/restapi/operations"
-	"facade/src/internal/queue"
 	"net/http"
 
 	"github.com/go-openapi/swag"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/models"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi/operations"
+	"github.com/howtocards/preview-queue/src/internal/queue"
 )
 
 func (api *service) render(params operations.RenderParams) operations.RenderResponder {

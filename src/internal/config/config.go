@@ -1,11 +1,11 @@
 package config
 
 import (
-	"facade/src/internal/api/generated/restapi"
 	"os"
 	"strconv"
 
 	"github.com/go-openapi/loads"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi"
 )
 
 // Log field names.

@@ -1,12 +1,12 @@
 package api
 
 import (
-	"facade/src/internal/config"
 	"net"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/howtocards/preview-queue/src/internal/config"
 	"github.com/powerman/structlog"
 )
 

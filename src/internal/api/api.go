@@ -2,15 +2,15 @@ package api
 
 import (
 	"context"
-	"facade/src/internal/api/generated/restapi"
-	"facade/src/internal/api/generated/restapi/operations"
-	"facade/src/internal/queue"
 	"fmt"
 	"net/http"
 	"path"
 
 	"github.com/go-openapi/loads"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi"
+	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi/operations"
+	"github.com/howtocards/preview-queue/src/internal/queue"
 	"github.com/powerman/structlog"
 	"github.com/sebest/xff"
 )

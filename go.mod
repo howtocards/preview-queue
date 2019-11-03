@@ -1,4 +1,4 @@
-module facade
+module github.com/howtocards/preview-queue
 
 go 1.13
 
