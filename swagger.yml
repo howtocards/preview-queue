@@ -1,0 +1,91 @@
+swagger: '2.0'
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+info:
+  version: 0.1.0
+  title: Facade.
+  description: A queuing wrapper.
+
+basePath: /
+
+schemes:
+  - http
+
+definitions:
+
+  event:
+    type: object
+    required:
+      - url
+      - selector
+      - callback
+    properties:
+      url:
+        $ref: '#/definitions/URL'
+      selector:
+        $ref: '#/definitions/Selector'
+      callback:
+        $ref: '#/definitions/URL'
+      appID:
+        $ref: '#/definitions/AppID'
+      userID:
+        $ref: '#/definitions/UserID'
+
+  AppID:
+    type: string
+
+  UserID:
+    type: string
+
+  URL:
+    type: string
+    minLength: 1
+    maxLength: 200
+
+  Selector:
+    type: string
+    minLength: 1
+    maxLength: 200
+
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        description: Either same as HTTP Status Code.
+        type: integer
+        format: int32
+      message:
+        type: string
+
+responses:
+  NoContent:
+    description: The server successfully processed the request and is not returning any content.
+
+  GenericError:
+    description: Generic error response.
+    schema:
+      $ref: '#/definitions/Error'
+
+paths:
+  /render:
+    post:
+      description: "Sending a message to the queue service."
+      operationId: render
+      parameters:
+        - name: args
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/event'
+      responses:
+        '200': {$ref: '#/responses/NoContent'}
+        default: {$ref: '#/responses/GenericError'}
+
+

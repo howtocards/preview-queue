@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  rabbit:
+    container_name: rabbit
+    image: "rabbitmq:3.7-management"
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
