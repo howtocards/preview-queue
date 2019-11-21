@@ -9,7 +9,7 @@ RUN apk update && apk upgrade && apk add bash
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
 # * GOFLAGS=-mod=vendor to force `go build` to look into the `/vendor` folder.
-ENV CGO_ENABLED=0 GOFLAGS=-mod=vendor
+ENV CGO_ENABLED=0
 
 ## Prebuild requirements
 RUN go get golang.org/x/tools/cmd/goimports
