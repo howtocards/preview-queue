@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 
 consumes:
   - application/json
@@ -16,40 +16,62 @@ schemes:
   - http
 
 definitions:
-
-  event:
+  UserRender:
     type: object
     required:
-      - url
-      - selector
+      - user
       - callback
     properties:
-      url:
-        $ref: '#/definitions/URL'
-      selector:
-        $ref: '#/definitions/Selector'
+      user:
+        $ref: "#/definitions/userPath"
       callback:
-        $ref: '#/definitions/URL'
-      appID:
-        $ref: '#/definitions/AppID'
-      userID:
-        $ref: '#/definitions/UserID'
+        $ref: "#/definitions/url"
+      extra:
+        $ref: '#/definitions/extra'
+    example:
+      user: "@sergeysova"
+      callback: "/preview/user/@sergeysova"
+      extra:
+        foo: bar
+        baz: true
+  
+  CardRender:
+    type: object
+    required:
+      - card
+      - callback
+    properties:
+      card:
+        $ref: '#/definitions/cardPath'
+      callback:
+        $ref: '#/definitions/url'
+      extra:
+        $ref: '#/definitions/extra'
+    example: 
+      card: "1902"
+      callback: "/preview/card/1902"
+      extra:
+        foo: bar
+        baz: true
 
-  AppID:
+  url:
     type: string
 
-  UserID:
+  userPath:
     type: string
-
-  URL:
-    type: string
+    description: Username to identify user. Should be prefixed @
     minLength: 1
     maxLength: 200
 
-  Selector:
+  cardPath:
     type: string
+    description: Id or card slug
     minLength: 1
     maxLength: 200
+
+  extra:
+    type: object
+    description: Optional object with any information for render worker
 
   Error:
     type: object
@@ -71,21 +93,43 @@ responses:
   GenericError:
     description: Generic error response.
     schema:
-      $ref: '#/definitions/Error'
+      $ref: "#/definitions/Error"
 
 paths:
-  /render:
+  /render/user:
     post:
-      description: "Sending a message to the queue service."
-      operationId: render
+      description: Render user preview
+      operationId: renderUser
       parameters:
-        - name: args
+        - name: body
           required: true
           in: body
           schema:
-            $ref: '#/definitions/event'
+            $ref: "#/definitions/UserRender"
+        - { $ref: "#/parameters/appName" }
       responses:
-        '200': {$ref: '#/responses/NoContent'}
-        default: {$ref: '#/responses/GenericError'}
+        "200": { $ref: "#/responses/NoContent" }
+        default: { $ref: "#/responses/GenericError" }
+  
+  /render/card:
+    post:
+      description: Render preview and snapshot for card
+      operationId: renderCard
+      parameters:
+        - name: body
+          required: true
+          in: body
+          schema:
+            $ref: '#/definitions/CardRender'
+        - { $ref: "#/parameters/appName" }
+      responses:
+        "200": { $ref: "#/responses/NoContent" }
+        default: { $ref: "#/responses/GenericError" }
 
+parameters:
+  appName:
+    name: appName
+    in: query
+    type: string
+    description: Name of the app that call api
 
