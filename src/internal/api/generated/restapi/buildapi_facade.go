@@ -22,7 +22,8 @@ func BuildAPI(
 
 	JSONProducer func(w io.Writer, data interface{}) error,
 
-	Render func(params operations.RenderParams) operations.RenderResponder,
+	RenderCard func(params operations.RenderCardParams) operations.RenderCardResponder,
+	RenderUser func(params operations.RenderUserParams) operations.RenderUserResponder,
 
 	ServerShutdown func(),
 
@@ -45,8 +46,12 @@ func BuildAPI(
 		api.JSONProducer = runtime.ProducerFunc(JSONProducer)
 	}
 
-	if Render != nil {
-		api.RenderHandler = operations.RenderHandlerFunc(Render)
+	if RenderCard != nil {
+		api.RenderCardHandler = operations.RenderCardHandlerFunc(RenderCard)
+	}
+
+	if RenderUser != nil {
+		api.RenderUserHandler = operations.RenderUserHandlerFunc(RenderUser)
 	}
 
 	if ServerShutdown != nil {

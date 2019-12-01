@@ -32,8 +32,11 @@ func configureAPI(api *operations.FacadeAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.RenderHandler = operations.RenderHandlerFunc(func(params operations.RenderParams) operations.RenderResponder {
-		return operations.RenderNotImplemented()
+	api.RenderCardHandler = operations.RenderCardHandlerFunc(func(params operations.RenderCardParams) operations.RenderCardResponder {
+		return operations.RenderCardNotImplemented()
+	})
+	api.RenderUserHandler = operations.RenderUserHandlerFunc(func(params operations.RenderUserParams) operations.RenderUserResponder {
+		return operations.RenderUserNotImplemented()
 	})
 
 	api.ServerShutdown = func() {}

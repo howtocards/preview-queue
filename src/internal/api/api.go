@@ -10,14 +10,13 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi"
 	"github.com/howtocards/preview-queue/src/internal/api/generated/restapi/operations"
-	"github.com/howtocards/preview-queue/src/internal/queue"
 	"github.com/powerman/structlog"
 	"github.com/sebest/xff"
 )
 
 type (
 	Queue interface {
-		Send(event queue.Event) error
+		Send(event interface{}, appID string) error
 	}
 
 	service struct {
@@ -49,7 +48,8 @@ func NewServer(log *structlog.Logger, queue Queue, cfg Config) (*restapi.Server,
 	api := operations.NewFacadeAPI(swaggerSpec)
 	api.Logger = log.New(structlog.KeyUnit, "swagger").Printf
 
-	api.RenderHandler = operations.RenderHandlerFunc(svc.render)
+	api.RenderCardHandler = operations.RenderCardHandlerFunc(svc.renderCard)
+	api.RenderUserHandler = operations.RenderUserHandlerFunc(svc.renderUser)
 
 	server := restapi.NewServer(api)
 	server.Host = cfg.Host

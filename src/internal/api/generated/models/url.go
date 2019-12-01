@@ -7,29 +7,13 @@ package models
 
 import (
 	strfmt "github.com/go-openapi/strfmt"
-
-	"github.com/go-openapi/errors"
-	"github.com/go-openapi/validate"
 )
 
-// URL URL
-// swagger:model URL
+// Extra url
+// swagger:model url
 type URL string
 
-// Validate validates this URL
+// Validate validates this url
 func (m URL) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	if err := validate.MinLength("", "body", string(m), 1); err != nil {
-		return err
-	}
-
-	if err := validate.MaxLength("", "body", string(m), 200); err != nil {
-		return err
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

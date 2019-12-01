@@ -37,9 +37,13 @@ func NewFacadeAPI(spec *loads.Document) *FacadeAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		RenderHandler: RenderHandlerFunc(func(params RenderParams) RenderResponder {
-			// return middleware.NotImplemented("operation Render has not yet been implemented")
-			return RenderNotImplemented()
+		RenderCardHandler: RenderCardHandlerFunc(func(params RenderCardParams) RenderCardResponder {
+			// return middleware.NotImplemented("operation RenderCard has not yet been implemented")
+			return RenderCardNotImplemented()
+		}),
+		RenderUserHandler: RenderUserHandlerFunc(func(params RenderUserParams) RenderUserResponder {
+			// return middleware.NotImplemented("operation RenderUser has not yet been implemented")
+			return RenderUserNotImplemented()
 		}),
 	}
 }
@@ -72,8 +76,10 @@ type FacadeAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// RenderHandler sets the operation handler for the render operation
-	RenderHandler RenderHandler
+	// RenderCardHandler sets the operation handler for the render card operation
+	RenderCardHandler RenderCardHandler
+	// RenderUserHandler sets the operation handler for the render user operation
+	RenderUserHandler RenderUserHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -137,8 +143,12 @@ func (o *FacadeAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.RenderHandler == nil {
-		unregistered = append(unregistered, "RenderHandler")
+	if o.RenderCardHandler == nil {
+		unregistered = append(unregistered, "RenderCardHandler")
+	}
+
+	if o.RenderUserHandler == nil {
+		unregistered = append(unregistered, "RenderUserHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -242,7 +252,12 @@ func (o *FacadeAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/render"] = NewRender(o.context, o.RenderHandler)
+	o.handlers["POST"]["/render/card"] = NewRenderCard(o.context, o.RenderCardHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/render/user"] = NewRenderUser(o.context, o.RenderUserHandler)
 
 }
 

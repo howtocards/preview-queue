@@ -46,15 +46,21 @@ func New(ch *amqp.Channel, cfg Config) *Queue {
 const contentType = "application/json"
 
 type Event struct {
-	URL      string `json:"url"`
-	Selector string `json:"selector"`
-	Callback string `json:"callback"`
-
-	AppID  string `json:"-"`
-	UserID string `json:"-"`
+	Extra    interface{} `json:"extra"`
+	Callback string      `json:"callback"`
 }
 
-func (s *Queue) Send(event Event) error {
+type Card struct {
+	Card string `json:"card"`
+	Event
+}
+
+type User struct {
+	User string `json:"user"`
+	Event
+}
+
+func (s *Queue) Send(event interface{}, appID string) error {
 	js, err := json.Marshal(event)
 	if err != nil {
 		return wrapErr("json marshal: %w", err)
@@ -64,8 +70,7 @@ func (s *Queue) Send(event Event) error {
 		ContentType: contentType,
 		MessageId:   ulid.MustNew(ulid.Now(), rand.Reader).String(),
 		Timestamp:   time.Now(),
-		UserId:      event.UserID,
-		AppId:       event.AppID,
+		AppId:       appID,
 		Body:        js,
 	}
 

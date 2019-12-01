@@ -11,15 +11,19 @@ import (
 	golangswaggerpaths "path"
 )
 
-// RenderURL generates an URL for the render operation
-type RenderURL struct {
+// RenderCardURL generates an Extra for the render card operation
+type RenderCardURL struct {
+	AppName *string
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *RenderURL) WithBasePath(bp string) *RenderURL {
+func (o *RenderCardURL) WithBasePath(bp string) *RenderCardURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -27,15 +31,15 @@ func (o *RenderURL) WithBasePath(bp string) *RenderURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *RenderURL) SetBasePath(bp string) {
+func (o *RenderCardURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *RenderURL) Build() (*url.URL, error) {
+func (o *RenderCardURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/render"
+	var _path = "/render/card"
 
 	_basePath := o._basePath
 	if _basePath == "" {
@@ -43,11 +47,23 @@ func (o *RenderURL) Build() (*url.URL, error) {
 	}
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
 
+	qs := make(url.Values)
+
+	var appName string
+	if o.AppName != nil {
+		appName = *o.AppName
+	}
+	if appName != "" {
+		qs.Set("appName", appName)
+	}
+
+	_result.RawQuery = qs.Encode()
+
 	return &_result, nil
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *RenderURL) Must(u *url.URL, err error) *url.URL {
+func (o *RenderCardURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -58,17 +74,17 @@ func (o *RenderURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *RenderURL) String() string {
+func (o *RenderCardURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *RenderURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *RenderCardURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on RenderURL")
+		return nil, errors.New("scheme is required for a full url on RenderCardURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on RenderURL")
+		return nil, errors.New("host is required for a full url on RenderCardURL")
 	}
 
 	base, err := o.Build()
@@ -82,6 +98,6 @@ func (o *RenderURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *RenderURL) StringFull(scheme, host string) string {
+func (o *RenderCardURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }
