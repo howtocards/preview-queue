@@ -12,12 +12,12 @@ import (
 	"github.com/go-openapi/validate"
 )
 
-// Selector selector
-// swagger:model Selector
-type Selector string
+// UserPath Username to identify user. Should be prefixed @
+// swagger:model userPath
+type UserPath string
 
-// Validate validates this selector
-func (m Selector) Validate(formats strfmt.Registry) error {
+// Validate validates this user path
+func (m UserPath) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	if err := validate.MinLength("", "body", string(m), 1); err != nil {

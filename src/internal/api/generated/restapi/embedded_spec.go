@@ -31,22 +31,52 @@ func init() {
   "info": {
     "description": "A queuing wrapper.",
     "title": "Facade.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "basePath": "/",
   "paths": {
-    "/render": {
+    "/render/card": {
       "post": {
-        "description": "Sending a message to the queue service.",
-        "operationId": "render",
+        "description": "Render preview and snapshot for card",
+        "operationId": "renderCard",
         "parameters": [
           {
-            "name": "args",
+            "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/event"
+              "$ref": "#/definitions/CardRender"
             }
+          },
+          {
+            "$ref": "#/parameters/appName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/NoContent"
+          },
+          "default": {
+            "$ref": "#/responses/GenericError"
+          }
+        }
+      }
+    },
+    "/render/user": {
+      "post": {
+        "description": "Render user preview",
+        "operationId": "renderUser",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRender"
+            }
+          },
+          {
+            "$ref": "#/parameters/appName"
           }
         ],
         "responses": {
@@ -61,8 +91,31 @@ func init() {
     }
   },
   "definitions": {
-    "AppID": {
-      "type": "string"
+    "CardRender": {
+      "type": "object",
+      "required": [
+        "card",
+        "callback"
+      ],
+      "properties": {
+        "callback": {
+          "$ref": "#/definitions/url"
+        },
+        "card": {
+          "$ref": "#/definitions/cardPath"
+        },
+        "extra": {
+          "$ref": "#/definitions/extra"
+        }
+      },
+      "example": {
+        "callback": "/preview/card/1902",
+        "card": "1902",
+        "extra": {
+          "baz": true,
+          "foo": "bar"
+        }
+      }
     },
     "Error": {
       "type": "object",
@@ -81,43 +134,58 @@ func init() {
         }
       }
     },
-    "Selector": {
-      "type": "string",
-      "maxLength": 200,
-      "minLength": 1
-    },
-    "URL": {
-      "type": "string",
-      "maxLength": 200,
-      "minLength": 1
-    },
-    "UserID": {
-      "type": "string"
-    },
-    "event": {
+    "UserRender": {
       "type": "object",
       "required": [
-        "url",
-        "selector",
+        "user",
         "callback"
       ],
       "properties": {
-        "appID": {
-          "$ref": "#/definitions/AppID"
-        },
         "callback": {
-          "$ref": "#/definitions/URL"
+          "$ref": "#/definitions/url"
         },
-        "selector": {
-          "$ref": "#/definitions/Selector"
+        "extra": {
+          "$ref": "#/definitions/extra"
         },
-        "url": {
-          "$ref": "#/definitions/URL"
-        },
-        "userID": {
-          "$ref": "#/definitions/UserID"
+        "user": {
+          "$ref": "#/definitions/userPath"
         }
+      },
+      "example": {
+        "callback": "/preview/user/@sergeysova",
+        "extra": {
+          "baz": true,
+          "foo": "bar"
+        },
+        "user": "@sergeysova"
       }
+    },
+    "cardPath": {
+      "description": "Id or card slug",
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1
+    },
+    "extra": {
+      "description": "Optional object with any information for render worker",
+      "type": "object"
+    },
+    "url": {
+      "type": "string"
+    },
+    "userPath": {
+      "description": "Username to identify user. Should be prefixed @",
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1
+    }
+  },
+  "parameters": {
+    "appName": {
+      "type": "string",
+      "description": "Name of the app that call api",
+      "name": "appName",
+      "in": "query"
     }
   },
   "responses": {
@@ -146,22 +214,61 @@ func init() {
   "info": {
     "description": "A queuing wrapper.",
     "title": "Facade.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "basePath": "/",
   "paths": {
-    "/render": {
+    "/render/card": {
       "post": {
-        "description": "Sending a message to the queue service.",
-        "operationId": "render",
+        "description": "Render preview and snapshot for card",
+        "operationId": "renderCard",
         "parameters": [
           {
-            "name": "args",
+            "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/event"
+              "$ref": "#/definitions/CardRender"
             }
+          },
+          {
+            "type": "string",
+            "description": "Name of the app that call api",
+            "name": "appName",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The server successfully processed the request and is not returning any content."
+          },
+          "default": {
+            "description": "Generic error response.",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/render/user": {
+      "post": {
+        "description": "Render user preview",
+        "operationId": "renderUser",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRender"
+            }
+          },
+          {
+            "type": "string",
+            "description": "Name of the app that call api",
+            "name": "appName",
+            "in": "query"
           }
         ],
         "responses": {
@@ -179,8 +286,31 @@ func init() {
     }
   },
   "definitions": {
-    "AppID": {
-      "type": "string"
+    "CardRender": {
+      "type": "object",
+      "required": [
+        "card",
+        "callback"
+      ],
+      "properties": {
+        "callback": {
+          "$ref": "#/definitions/url"
+        },
+        "card": {
+          "$ref": "#/definitions/cardPath"
+        },
+        "extra": {
+          "$ref": "#/definitions/extra"
+        }
+      },
+      "example": {
+        "callback": "/preview/card/1902",
+        "card": "1902",
+        "extra": {
+          "baz": true,
+          "foo": "bar"
+        }
+      }
     },
     "Error": {
       "type": "object",
@@ -199,43 +329,58 @@ func init() {
         }
       }
     },
-    "Selector": {
-      "type": "string",
-      "maxLength": 200,
-      "minLength": 1
-    },
-    "URL": {
-      "type": "string",
-      "maxLength": 200,
-      "minLength": 1
-    },
-    "UserID": {
-      "type": "string"
-    },
-    "event": {
+    "UserRender": {
       "type": "object",
       "required": [
-        "url",
-        "selector",
+        "user",
         "callback"
       ],
       "properties": {
-        "appID": {
-          "$ref": "#/definitions/AppID"
-        },
         "callback": {
-          "$ref": "#/definitions/URL"
+          "$ref": "#/definitions/url"
         },
-        "selector": {
-          "$ref": "#/definitions/Selector"
+        "extra": {
+          "$ref": "#/definitions/extra"
         },
-        "url": {
-          "$ref": "#/definitions/URL"
-        },
-        "userID": {
-          "$ref": "#/definitions/UserID"
+        "user": {
+          "$ref": "#/definitions/userPath"
         }
+      },
+      "example": {
+        "callback": "/preview/user/@sergeysova",
+        "extra": {
+          "baz": true,
+          "foo": "bar"
+        },
+        "user": "@sergeysova"
       }
+    },
+    "cardPath": {
+      "description": "Id or card slug",
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1
+    },
+    "extra": {
+      "description": "Optional object with any information for render worker",
+      "type": "object"
+    },
+    "url": {
+      "type": "string"
+    },
+    "userPath": {
+      "description": "Username to identify user. Should be prefixed @",
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 1
+    }
+  },
+  "parameters": {
+    "appName": {
+      "type": "string",
+      "description": "Name of the app that call api",
+      "name": "appName",
+      "in": "query"
     }
   },
   "responses": {
