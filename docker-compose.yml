@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: queue
+    image: howtocards/preview-queue/preview-queue
     container_name: queue
     restart: always
     entrypoint: /queue
