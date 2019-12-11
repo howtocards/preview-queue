@@ -19,7 +19,7 @@ func (api *service) renderCard(params operations.RenderCardParams) operations.Re
 			Callback: string(params.Body.Callback),
 		},
 	}
-	log.Info("params", event)
+	log.Info("params", "event", event)
 
 	err := api.queue.Send(event, swag.StringValue(params.AppName))
 	if err != nil {
@@ -43,7 +43,7 @@ func (api *service) renderUser(params operations.RenderUserParams) operations.Re
 			Callback: string(params.Body.Callback),
 		},
 	}
-	log.Info("params", event)
+	log.Info("params", "event", event)
 
 	err := api.queue.Send(event, swag.StringValue(params.AppName))
 	if err != nil {
